@@ -2,13 +2,13 @@
 
 echo "========= OnTheSpot macOS Build Script =========="
 
-# Step 1: Ensure we're in the correct directory
+# Step 1: Ensure we’re in the correct project directory
 FOLDER_NAME=$(basename "$PWD")
 if [ "$FOLDER_NAME" == "scripts" ]; then
     echo "You are in the scripts folder. Changing to the parent directory..."
     cd ..
 elif [ "$FOLDER_NAME" != "onthespot" ]; then
-    echo "Error: Please ensure you're in the project folder. Current folder is: $FOLDER_NAME"
+    echo "Error: Please ensure you're in the project directory. Current folder is: $FOLDER_NAME"
     exit 1
 fi
 
@@ -52,8 +52,13 @@ pyinstaller --windowed \
 
 # Step 7: Move output to dist directory and verify .app package
 echo " => Moving .app package to 'dist' directory..."
-mv ./dist/OnTheSpot.app ./dist/onthespot_mac.app
-chmod +x ./dist/onthespot_mac.app
+if [ -d "./dist/OnTheSpot.app" ]; then
+    mv ./dist/OnTheSpot.app ./dist/onthespot_mac.app
+    chmod -R +x ./dist/onthespot_mac.app
+else
+    echo "Error: .app package was not found after PyInstaller build."
+    exit 1
+fi
 
 # Step 8: Clean up temporary files
 echo " => Cleaning up temporary files..."

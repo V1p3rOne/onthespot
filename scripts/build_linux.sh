@@ -52,13 +52,21 @@ pyinstaller --onefile \
     --icon="src/onthespot/resources/icons/onthespot.png" \
     src/portable.py || { echo "PyInstaller build failed"; exit 1; }
 
-# Step 7: Move output to `dist` directory and set permissions
-echo " => Moving output to 'dist' directory and setting executable permissions..."
-mv ./dist/$NAME ./dist/onthespot_linux_executable
-chmod +x ./dist/onthespot_linux_executable
+# Step 7: Verify output and package it
+if [ -f "./dist/$NAME" ]; then
+    echo " => Packaging executable as tar.gz archive..."
+    cd dist
+    tar -czvf onthespot_linux.tar.gz $NAME || { echo "Error: Failed to create tar.gz archive"; exit 1; }
+    chmod +x onthespot_linux.tar.gz
+    echo " => Archive created at 'dist/onthespot_linux.tar.gz'"
+else
+    echo "Error: Expected output file $NAME not found."
+    exit 1
+fi
 
 # Step 8: Clean up temporary files
 echo " => Cleaning up temporary files..."
+cd ..
 rm -rf __pycache__ build venv *.spec
 
-echo " => Done! Executable available in 'dist/onthespot_linux_executable'."
+echo " => Done! Packaged tar.gz is available in 'dist/onthespot_linux.tar.gz'."

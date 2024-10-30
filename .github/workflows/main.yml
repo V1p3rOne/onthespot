@@ -1,0 +1,156 @@
+name: Release Builder
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types: [published]
+
+jobs:
+  # Windows Build
+  windows-build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Run Windows Build Script
+        run: scripts\build_windows.bat
+        shell: cmd
+
+      - name: Upload Windows Executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: onthespot_windows.exe
+          path: dist/onthespot_win_executable.exe
+
+      - name: Upload to Release (Windows)
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist/onthespot_win_executable.exe
+          asset_name: onthespot_windows.exe
+          asset_content_type: application/octet-stream
+
+  # Linux Build
+  linux-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y patchelf fuse libfuse2 wget
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller build
+
+      - name: Run Linux Build Script
+        run: scripts/build_linux.sh
+        shell: bash
+
+      - name: Package Linux Executable
+        run: |
+          cd dist
+          tar -czvf onthespot_linux.tar.gz onthespot_linux
+
+      - name: Upload Linux Executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: onthespot_linux.tar.gz
+          path: dist/onthespot_linux.tar.gz
+
+      - name: Upload to Release (Linux)
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist/onthespot_linux.tar.gz
+          asset_name: onthespot_linux.tar.gz
+          asset_content_type: application/gzip
+
+  # macOS Build
+  macos-build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          brew install pyinstaller
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run macOS Build Script
+        run: scripts/build_macos.sh
+        shell: bash
+
+      - name: Upload macOS DMG
+        uses: actions/upload-artifact@v3
+        with:
+          name: onthespot_macos.dmg
+          path: dist/onthespot_mac.app
+
+      - name: Upload to Release (macOS)
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist/onthespot_mac.app
+          asset_name: onthespot_macos.dmg
+          asset_content_type: application/x-apple-diskimage
+
+  # AppImage Build
+  appimage-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fuse patchelf wget
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      - name: Run AppImage Build Script
+        run: scripts/build_appimage.sh
+        shell: bash
+
+      - name: Upload AppImage Executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: onthespot_appimage.AppImage
+          path: dist/onthespot_appimage.AppImage
+
+      - name: Upload to Release (AppImage)
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist/onthespot_appimage.AppImage
+          asset_name: onthespot_appimage.AppImage
+          asset_content_type: application/octet-stream
+
+

@@ -5,7 +5,7 @@ echo "========= OnTheSpot AppImage Build Script ==========="
 # Step 1: Clean up any previous build artifacts and set up directories
 echo " => Cleaning up previous builds and setting up directories!"
 rm -rf dist build
-mkdir build
+mkdir -p build dist
 cd build
 
 # Step 2: Download appimagetool with retry logic in case of failures
@@ -88,5 +88,6 @@ cd ..
 ./appimagetool-x86_64.AppImage --appimage-extract
 squashfs-root/AppRun OnTheSpot.AppDir
 mv OnTheSpot-x86_64.AppImage ../dist/OnTheSpot-x86_64.AppImage
+chmod +x ../dist/OnTheSpot-x86_64.AppImage
 
-echo " => Done"
+echo " => Done! AppImage available at 'dist/OnTheSpot-x86_64.AppImage'"

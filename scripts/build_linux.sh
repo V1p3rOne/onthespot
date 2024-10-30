@@ -57,7 +57,7 @@ if [ -f "./dist/$NAME" ]; then
     echo " => Packaging executable as tar.gz archive..."
     cd dist
     tar -czvf onthespot_linux.tar.gz $NAME || { echo "Error: Failed to create tar.gz archive"; exit 1; }
-    chmod +x onthespot_linux.tar.gz
+    chmod +x onthespot_linux.tar.gz  # Ensure tar.gz archive has execute permissions for distribution
     echo " => Archive created at 'dist/onthespot_linux.tar.gz'"
 else
     echo "Error: Expected output file $NAME not found."

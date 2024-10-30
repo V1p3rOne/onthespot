@@ -50,11 +50,11 @@ pyinstaller --windowed \
     --icon="src/onthespot/resources/icons/onthespot.png" \
     src/portable.py || { echo "PyInstaller build failed"; exit 1; }
 
-# Step 7: Move output to dist directory and verify .app package
+# Step 7: Move output to dist directory, verify, and set permissions
 echo " => Moving .app package to 'dist' directory..."
 if [ -d "./dist/OnTheSpot.app" ]; then
     mv ./dist/OnTheSpot.app ./dist/onthespot_mac.app
-    chmod -R +x ./dist/onthespot_mac.app
+    chmod -R +x ./dist/onthespot_mac.app  # Ensures that all files in .app have execute permissions
 else
     echo "Error: .app package was not found after PyInstaller build."
     exit 1

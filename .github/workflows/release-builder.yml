@@ -16,7 +16,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -49,12 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Set Permissions and Make Scripts Executable
-        run: |
-          chmod +x scripts/build_linux.sh
-          chmod +x scripts/build_appimage.sh  # Ensure permissions on AppImage script as well
+        uses: actions/checkout@v4
 
       - name: Install Dependencies
         run: |
@@ -62,6 +57,11 @@ jobs:
           sudo apt-get install -y patchelf fuse libfuse2 wget
           python -m pip install --upgrade pip
           pip install -r requirements.txt pyinstaller build
+
+      - name: Make Build Scripts Executable
+        run: |
+          chmod +x scripts/build_linux.sh
+          chmod +x scripts/build_appimage.sh
 
       - name: Run Linux Build Script
         run: scripts/build_linux.sh
@@ -94,10 +94,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Set Permissions and Make Script Executable
-        run: chmod +x scripts/build_macos.sh
+        uses: actions/checkout@v4
 
       - name: Install Dependencies
         run: |
@@ -105,14 +102,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Make Build Script Executable
+        run: chmod +x scripts/build_mac.sh
+
       - name: Run macOS Build Script
-        run: scripts/build_macos.sh
+        run: scripts/build_mac.sh
         shell: bash
 
       - name: Upload macOS DMG
         uses: actions/upload-artifact@v3
         with:
-          name: onthespot_macos.dmg
+          name: onthespot_mac.dmg
           path: dist/onthespot_mac.app
 
       - name: Upload to Release (macOS)
@@ -123,7 +123,7 @@ jobs:
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: dist/onthespot_mac.app
-          asset_name: onthespot_macos.dmg
+          asset_name: onthespot_mac.dmg
           asset_content_type: application/x-apple-diskimage
 
   # AppImage Build
@@ -131,10 +131,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Set Permissions and Make Script Executable
-        run: chmod +x scripts/build_appimage.sh
+        uses: actions/checkout@v4
 
       - name: Install Dependencies
         run: |
@@ -142,6 +139,9 @@ jobs:
           sudo apt-get install -y fuse patchelf wget
           python -m pip install --upgrade pip
           pip install -r requirements.txt pyinstaller
+
+      - name: Make AppImage Build Script Executable
+        run: chmod +x scripts/build_appimage.sh
 
       - name: Run AppImage Build Script
         run: scripts/build_appimage.sh

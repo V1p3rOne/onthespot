@@ -16,10 +16,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3  # Updated to the latest version
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v4  # Compatible with Node 20
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
@@ -28,14 +28,13 @@ jobs:
         shell: cmd
 
       - name: Upload Windows Executable
-        if: always()  # Upload even if build fails for troubleshooting
         uses: actions/upload-artifact@v3
         with:
           name: onthespot_windows.exe
           path: dist/onthespot_win_executable.exe
 
       - name: Upload to Release (Windows)
-        if: github.event_name == 'release' && success()
+        if: github.event_name == 'release'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -52,15 +51,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Set Permissions and Make Scripts Executable
+        run: |
+          chmod +x scripts/build_linux.sh
+          chmod +x scripts/build_appimage.sh  # Ensure permissions on AppImage script as well
+
       - name: Install Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y patchelf fuse libfuse2 wget
           python -m pip install --upgrade pip
           pip install -r requirements.txt pyinstaller build
-
-      - name: Make Build Script Executable
-        run: chmod +x scripts/build_linux.sh
 
       - name: Run Linux Build Script
         run: scripts/build_linux.sh
@@ -72,14 +73,13 @@ jobs:
           tar -czvf onthespot_linux.tar.gz onthespot_linux_executable
 
       - name: Upload Linux Executable
-        if: always()  # Upload even if build fails for troubleshooting
         uses: actions/upload-artifact@v3
         with:
           name: onthespot_linux.tar.gz
           path: dist/onthespot_linux.tar.gz
 
       - name: Upload to Release (Linux)
-        if: github.event_name == 'release' && success()
+        if: github.event_name == 'release'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -96,28 +96,27 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Set Permissions and Make Script Executable
+        run: chmod +x scripts/build_macos.sh
+
       - name: Install Dependencies
         run: |
           brew install pyinstaller
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Make Build Script Executable
-        run: chmod +x scripts/build_macos.sh
-
       - name: Run macOS Build Script
         run: scripts/build_macos.sh
         shell: bash
 
       - name: Upload macOS DMG
-        if: always()  # Upload even if build fails for troubleshooting
         uses: actions/upload-artifact@v3
         with:
           name: onthespot_macos.dmg
           path: dist/onthespot_mac.app
 
       - name: Upload to Release (macOS)
-        if: github.event_name == 'release' && success()
+        if: github.event_name == 'release'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -134,6 +133,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Set Permissions and Make Script Executable
+        run: chmod +x scripts/build_appimage.sh
+
       - name: Install Dependencies
         run: |
           sudo apt-get update
@@ -141,22 +143,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pyinstaller
 
-      - name: Make AppImage Build Script Executable
-        run: chmod +x scripts/build_appimage.sh
-
       - name: Run AppImage Build Script
         run: scripts/build_appimage.sh
         shell: bash
 
       - name: Upload AppImage Executable
-        if: always()  # Upload even if build fails for troubleshooting
         uses: actions/upload-artifact@v3
         with:
           name: onthespot_appimage.AppImage
           path: dist/onthespot_appimage.AppImage
 
       - name: Upload to Release (AppImage)
-        if: github.event_name == 'release' && success()
+        if: github.event_name == 'release'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

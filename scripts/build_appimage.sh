@@ -2,74 +2,63 @@
 
 echo "========= OnTheSpot AppImage Build Script ==========="
 
-
-echo " => Cleaning up !"
+# Step 1: Clean up any previous builds and set up directories
+echo " => Cleaning up previous builds and setting up directories!"
 rm -rf dist build
+mkdir -p dist build
+cd build || exit 1
 
-
-echo " => Fetch Dependencies"
-mkdir build
-cd build
-
-wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+# Step 2: Download appimagetool
+echo " => Fetching appimagetool"
+wget -q https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage || {
+    echo "Error: Failed to download appimagetool"; exit 1;
+}
 chmod +x appimagetool-x86_64.AppImage
 
-wget https://github.com/niess/python-appimage/releases/download/python3.12/python3.12.3-cp312-cp312-manylinux2014_x86_64.AppImage
-chmod +x python3.12.3-cp312-cp312-manylinux2014_x86_64.AppImage
+# Step 3: Download Python AppImage
+echo " => Fetching Python AppImage"
+wget -q https://github.com/niess/python-appimage/releases/download/python3.12/python3.12.3-cp312-cp312-manylinux2014_x86_64.AppImage -O python3.AppImage || {
+    echo "Error: Failed to download Python AppImage"; exit 1;
+}
+chmod +x python3.AppImage
 
-./python3.12.3-cp312-cp312-manylinux2014_x86_64.AppImage --appimage-extract
+# Step 4: Extract Python AppImage
+./python3.AppImage --appimage-extract || { 
+    echo "Error: Python extraction failed"; exit 1;
+}
 mv squashfs-root OnTheSpot.AppDir
 
-
-echo " => Build OnTheSpot.whl"
+# Step 5: Build OnTheSpot Python wheel
+echo " => Building OnTheSpot Python wheel"
 cd ..
-build/OnTheSpot.AppDir/AppRun -m build
+./build/OnTheSpot.AppDir/AppRun -m build || {
+    echo "Error: Failed to build OnTheSpot wheel"; exit 1;
+}
 
-
-echo " => Prepare OnTheSpot AppImage"
-cd build/OnTheSpot.AppDir
+# Step 6: Prepare the AppImage environment
+echo " => Installing dependencies into AppImage environment"
+cd build/OnTheSpot.AppDir || exit 1
 ./AppRun -m pip install -r ../../requirements.txt
 ./AppRun -m pip install ../../dist/onthespot-*-py3-none-any.whl
 
+# Step 7: Clean up unnecessary files
 rm AppRun .DirIcon python.png python3.12.3.desktop
-cp -t . ../../src/onthespot/resources/icons/onthespot.png ../../src/onthespot/resources/org.onthespot.OnTheSpot.desktop
+cp ../../src/onthespot/resources/icons/onthespot.png .
+cp ../../src/onthespot/resources/org.onthespot.OnTheSpot.desktop .
 
-# Create AppRun Script
-echo '#! /bin/bash
+# Step 8: Create AppRun script
+echo " => Creating AppRun script for AppImage"
+echo '#!/bin/bash
 HERE="$(dirname "$(readlink -f "${0}")")"
-export PATH=$HERE/usr/bin:$PATH;
-export APPIMAGE_COMMAND=$(command -v -- "$ARGV0")
-export TCL_LIBRARY="${APPDIR}/usr/share/tcltk/tcl8.6"
-export TK_LIBRARY="${APPDIR}/usr/share/tcltk/tk8.6"
-export TKPATH="${TK_LIBRARY}"
-export SSL_CERT_FILE="${APPDIR}/opt/_internal/certs.pem"
-"$HERE/opt/python3.12/bin/python3.12" "-m" "onthespot" "$@"' > AppRun
-
-chmod -R 0755 ../OnTheSpot.AppDir
+export PATH=$HERE/usr/bin:$PATH
+"$HERE/opt/python3/bin/python3" -m onthespot "$@"' > AppRun
 chmod +x AppRun
 
-echo ' '
-echo ' # ffmpeg and ffplay need to be manually added to OnTheSpot.AppDir/usr/bin.'
-echo ' # Make sure to run chmod +x on each, binaries can be found here:'
-echo ' # https://johnvansickle.com/ffmpeg/'
-echo ' '
-echo ' => Done adding ffmpeg binaries? (y/n)'
-
-read ffmpeg
-case $ffmpeg in
-  y)
-    sleep 1
-    clear
-    ;;
-esac
-
-
-echo " => Build OnTheSpot AppImage"
-
+# Step 9: Build the AppImage
+echo " => Building final AppImage"
 cd ..
-./appimagetool-x86_64.AppImage --appimage-extract
-squashfs-root/AppRun OnTheSpot.AppDir
-mv OnTheSpot-x86_64.AppImage ../dist/OnTheSpot-x86_64.AppImage
+./appimagetool-x86_64.AppImage OnTheSpot.AppDir -o ../dist/OnTheSpot-latest-x86_64.AppImage || {
+    echo "Error: AppImage creation failed"; exit 1;
+}
 
-
-echo " => Done "
+echo " => Done! AppImage successfully created in 'dist' folder."

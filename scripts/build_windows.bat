@@ -43,14 +43,14 @@ pyinstaller --onefile --noconsole --noconfirm ^
     --add-data="src/onthespot/resources/icons/*.png;onthespot/resources/icons" ^
     --add-binary="build/ffmpeg/*/bin/ffmpeg.exe;onthespot/bin/ffmpeg" ^
     --paths="src/onthespot" ^
-    --name="onthespot_win_executable" ^
+    --name="OnTheSpot" ^
     --icon="src/onthespot/resources/icons/onthespot.png" ^
     src\portable.py
 
 
 echo =^> Cleaning up temporary files...
-del /F /Q onthespot_win.spec
+del /F /Q *.spec
 rmdir /s /q build __pycache__ ffbin_win venvwin
 
 
-echo =^> Done! Executable available as 'dist/onthespot_win_executable.exe'.
+echo =^> Done! Executable available as 'dist/OnTheSpot.exe'.

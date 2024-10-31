@@ -4,12 +4,12 @@ echo "========= OnTheSpot macOS Build Script =========="
 
 
 echo " => Cleaning up previous builds!"
-rm -rf ./dist/onthespot_mac.app ./dist/onthespot_mac_ffm.app
+rm -rf dist/onthespot_mac.app dist/onthespot_mac_ffm.app
 
 
 echo " => Creating and activating virtual environment..."
 python3 -m venv venv
-source ./venv/bin/activate
+source venv/bin/activate
 
 
 echo " => Upgrading pip and installing necessary dependencies..."
@@ -35,7 +35,11 @@ pyinstaller --windowed \
     src/portable.py
 
 echo " => Setting executable permissions..."
-chmod +x ./dist/OnTheSpot.app
+chmod +x dist/OnTheSpot.app
+mkdir dist/OnTheSpot
+mv dist/OnTheSpot.app dist/OnTheSpot/OnTheSpot.app
+ln -s /Applications dist/OnTheSpot
+hdiutil create -srcfolder dist/OnTheSpot -format UDZO -o dist/OnTheSpot.dmg
 
 echo " => Cleaning up temporary files..."
 rm -rf __pycache__ build venv *.spec

@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: onthespot_windows.exe
-          path: dist/onthespot_win_executable.exe
+          path: dist/OnTheSpot.exe
 
       - name: Upload to Release (Windows)
         if: github.event_name == 'release'
@@ -40,8 +40,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/onthespot_win_executable.exe
-          asset_name: onthespot_windows.exe
+          asset_path: dist/OnTheSpot.exe
+          asset_name: OnTheSpot.exe
           asset_content_type: application/octet-stream
 
   # Linux Build
@@ -55,28 +55,16 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y patchelf fuse libfuse2 wget
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt pyinstaller build
-
-      - name: Make Build Scripts Executable
-        run: |
-          chmod +x scripts/build_linux.sh
-          chmod +x scripts/build_appimage.sh
 
       - name: Run Linux Build Script
         run: scripts/build_linux.sh
         shell: bash
 
-      - name: Package Linux Executable
-        run: |
-          cd dist
-          tar -czvf onthespot_linux.tar.gz onthespot_linux_executable
-
       - name: Upload Linux Executable
         uses: actions/upload-artifact@v3
         with:
-          name: onthespot_linux.tar.gz
-          path: dist/onthespot_linux.tar.gz
+          name: OnTheSpot.tar.gz
+          path: dist/OnTheSpot.tar.gz
 
       - name: Upload to Release (Linux)
         if: github.event_name == 'release'
@@ -85,8 +73,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/onthespot_linux.tar.gz
-          asset_name: onthespot_linux.tar.gz
+          asset_path: dist/OnTheSpot.tar.gz
+          asset_name: OnTheSpot.tar.gz
           asset_content_type: application/gzip
 
   # macOS Build
@@ -96,15 +84,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install Dependencies
-        run: |
-          brew install pyinstaller
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Make Build Script Executable
-        run: chmod +x scripts/build_mac.sh
-
       - name: Run macOS Build Script
         run: scripts/build_mac.sh
         shell: bash
@@ -112,8 +91,8 @@ jobs:
       - name: Upload macOS DMG
         uses: actions/upload-artifact@v3
         with:
-          name: onthespot_mac.dmg
-          path: dist/onthespot_mac.app
+          name: OnTheSpot.dmg
+          path: dist/OnTheSpot.dmg
 
       - name: Upload to Release (macOS)
         if: github.event_name == 'release'
@@ -122,8 +101,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/onthespot_mac.app
-          asset_name: onthespot_mac.dmg
+          asset_path: dist/OnTheSpot.dmg
+          asset_name: OnTheSpot.dmg
           asset_content_type: application/x-apple-diskimage
 
   # AppImage Build
@@ -136,12 +115,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y fuse patchelf wget
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt pyinstaller
-
-      - name: Make AppImage Build Script Executable
-        run: chmod +x scripts/build_appimage.sh
+          sudo apt-get install -y ffmpeg fuse patchelf wget
 
       - name: Run AppImage Build Script
         run: scripts/build_appimage.sh
@@ -150,8 +124,8 @@ jobs:
       - name: Upload AppImage Executable
         uses: actions/upload-artifact@v3
         with:
-          name: onthespot_appimage.AppImage
-          path: dist/onthespot_appimage.AppImage
+          name: OnTheSpot-x86_64.AppImage
+          path: dist/OnTheSpot-x86_64.AppImage
 
       - name: Upload to Release (AppImage)
         if: github.event_name == 'release'
@@ -160,6 +134,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/onthespot_appimage.AppImage
-          asset_name: onthespot_appimage.AppImage
+          asset_path: dist/OnTheSpot-x86_64.AppImage
+          asset_name: OnTheSpot-x86_64.AppImage
           asset_content_type: application/octet-stream

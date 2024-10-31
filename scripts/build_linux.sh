@@ -39,20 +39,14 @@ pyinstaller --onefile \
     --icon="src/onthespot/resources/icons/onthespot.png" \
     src/portable.py
 
-if [ -f "./dist/$NAME" ]; then
-    echo " => Packaging executable as tar.gz archive..."
-    cd dist
-    tar -czvf onthespot_linux.tar.gz $NAME
-    echo " => Archive created at 'dist/onthespot_linux.tar.gz'"
-else
-    echo "Error: Expected output file $NAME not found."
-    exit 1
-fi
+echo " => Packaging executable as tar.gz archive..."
+cd dist
+tar -czvf OnTheSpot.tar.gz $NAME
+cd ..
 
 
 echo " => Cleaning up temporary files..."
-cd ..
 rm -rf __pycache__ build venv *.spec
 
 
-echo " => Done! Packaged tar.gz is available in 'dist/onthespot_linux.tar.gz'."
+echo " => Done! Packaged tar.gz is available in 'dist/OnTheSpot.gz'."

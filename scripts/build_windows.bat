@@ -29,7 +29,7 @@ pip install -r requirements.txt
 
 echo =^> Downloading FFmpeg binary...
 mkdir build
-wget https://github.com/GyanD/codexffmpeg/releases/download/7.1/ffmpeg-7.1-essentials_build.zip -O build\ffmpeg.zip
+curl -L -o build\ffmpeg.zip https://github.com/GyanD/codexffmpeg/releases/download/7.1/ffmpeg-7.1-essentials_build.zip
 powershell -Command "Expand-Archive -Path build\ffmpeg.zip -DestinationPath build\ffmpeg"
 
 
@@ -41,7 +41,7 @@ pyinstaller --onefile --noconsole --noconfirm ^
     --add-data="src/onthespot/resources/themes/*.qss;onthespot/resources/themes" ^
     --add-data="src/onthespot/gui/qtui/*.ui;onthespot/gui/qtui" ^
     --add-data="src/onthespot/resources/icons/*.png;onthespot/resources/icons" ^
-    --add-binary="build/ffmpeg/*/bin/ffmpeg.exe;onthespot/bin/ffmpeg" ^
+    --add-binary="build/ffmpeg/ffmpeg-7.1-essentials_build/bin/ffmpeg.exe;onthespot/bin/ffmpeg" ^
     --paths="src/onthespot" ^
     --name="OnTheSpot" ^
     --icon="src/onthespot/resources/icons/onthespot.png" ^

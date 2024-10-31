@@ -14,7 +14,7 @@ cd build
 wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
 chmod +x appimagetool-x86_64.AppImage
 
-wget https://github.com/niess/python-appimage/releases/download/python3.12/python3.12.3-cp312-cp312-manylinux2014_x86_64.AppImage
+wget https://github.com/niess/python-appimage/releases/download/python3.12/python3.12.7-cp312-cp312-manylinux2014_x86_64.AppImage
 chmod +x python3.12.3-cp312-cp312-manylinux2014_x86_64.AppImage
 
 ./python3.12.3-cp312-cp312-manylinux2014_x86_64.AppImage --appimage-extract

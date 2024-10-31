@@ -49,4 +49,4 @@ echo " => Cleaning up temporary files..."
 rm -rf __pycache__ build venv *.spec
 
 
-echo " => Done! Packaged tar.gz is available in 'dist/OnTheSpot.gz'."
+echo " => Done! Packaged tar.gz is available in 'dist/OnTheSpot.tar.gz'."

@@ -19,7 +19,7 @@ venv/bin/pip install -r requirements.txt
 
 echo " => Running PyInstaller to create .app package..."
 mkdir build
-wget https://evermeet.cx/ffmpeg/ffmpeg-7.1.zip -O ffmpeg.zip
+wget https://evermeet.cx/ffmpeg/ffmpeg-7.1.zip -O build/ffmpeg.zip
 unzip build/ffmpeg.zip -d build
 pyinstaller --windowed \
     --hidden-import="zeroconf._utils.ipaddress" \
@@ -36,6 +36,9 @@ pyinstaller --windowed \
 
 echo " => Setting executable permissions..."
 chmod +x dist/OnTheSpot.app
+
+
+echo " => Creating dmg..."
 mkdir dist/OnTheSpot
 mv dist/OnTheSpot.app dist/OnTheSpot/OnTheSpot.app
 ln -s /Applications dist/OnTheSpot

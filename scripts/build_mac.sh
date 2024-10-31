@@ -39,7 +39,7 @@ chmod +x dist/OnTheSpot.app
 
 
 echo " => Creating dmg..."
-mkdir dist/OnTheSpot
+mkdir -p dist/OnTheSpot
 mv dist/OnTheSpot.app dist/OnTheSpot/OnTheSpot.app
 ln -s /Applications dist/OnTheSpot
 hdiutil create -srcfolder dist/OnTheSpot -format UDZO -o dist/OnTheSpot.dmg
@@ -47,4 +47,4 @@ hdiutil create -srcfolder dist/OnTheSpot -format UDZO -o dist/OnTheSpot.dmg
 echo " => Cleaning up temporary files..."
 rm -rf __pycache__ build venv *.spec
 
-echo " => Done! .app package available in 'dist/OnTheSpot.app'."
+echo " => Done! .dmg available in 'dist/OnTheSpot.dmg'."

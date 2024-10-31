@@ -115,7 +115,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg desktop-file-validate fuse patchelf wget
+          sudo apt-get install -y ffmpeg desktop-file-utils fuse patchelf wget
 
       - name: Run AppImage Build Script
         run: scripts/build_appimage.sh

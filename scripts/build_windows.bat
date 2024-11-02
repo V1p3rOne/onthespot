@@ -7,31 +7,25 @@ if /i "%FOLDER_NAME%"=="scripts" (
     cd ..
 )
 
-echo ========= OnTheSpot Windows Build Script =========
-
+echo <========= OnTheSpot Windows Build Script =========>
 
 echo =^> Cleaning up previous builds...
 del /F /Q /A dist\onthespot_win_executable.exe
 
-
 echo =^> Creating virtual environment...
 python -m venv venvwin
 
-
 echo =^> Activating virtual environment...
 call venvwin\Scripts\activate.bat
-
 
 echo =^> Installing dependencies via pip...
 python -m pip install --upgrade pip wheel pyinstaller
 pip install -r requirements.txt
 
-
 echo =^> Downloading FFmpeg binary...
 mkdir build
 curl -L -o build\ffmpeg.zip https://github.com/GyanD/codexffmpeg/releases/download/7.1/ffmpeg-7.1-essentials_build.zip
 powershell -Command "Expand-Archive -Path build\ffmpeg.zip -DestinationPath build\ffmpeg"
-
 
 echo =^> Running PyInstaller to create .exe package...
 pyinstaller --onefile --noconsole --noconfirm ^
@@ -47,10 +41,8 @@ pyinstaller --onefile --noconsole --noconfirm ^
     --icon="src/onthespot/resources/icons/onthespot.png" ^
     src\portable.py
 
-
 echo =^> Cleaning up temporary files...
 del /F /Q *.spec
 rmdir /s /q build __pycache__ ffbin_win venvwin
-
 
 echo =^> Done! Executable available as 'dist/OnTheSpot.exe'.

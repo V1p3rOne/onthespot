@@ -1,11 +1,9 @@
 #!/bin/bash
 
-echo "========= OnTheSpot AppImage Build Script ==========="
-
+echo "<========= OnTheSpot AppImage Build Script ===========>"
 
 echo " => Cleaning up !"
 rm -rf dist build
-
 
 echo " => Fetch Dependencies"
 mkdir build
@@ -20,11 +18,9 @@ chmod +x python.AppImage
 ./python.AppImage --appimage-extract
 mv squashfs-root OnTheSpot.AppDir
 
-
 echo " => Build OnTheSpot.whl"
 cd ..
 build/OnTheSpot.AppDir/AppRun -m build
-
 
 echo " => Prepare OnTheSpot AppImage"
 cd build/OnTheSpot.AppDir
@@ -50,7 +46,6 @@ chmod +x AppRun
 cp $(which ffmpeg) ../OnTheSpot.AppDir/usr/bin
 cp $(which ffplay) ../OnTheSpot.AppDir/usr/bin
 
-
 echo " => Build OnTheSpot AppImage"
 cd ..
 ./appimagetool-x86_64.AppImage --appimage-extract
@@ -58,5 +53,4 @@ squashfs-root/AppRun OnTheSpot.AppDir
 
 mv OnTheSpot-x86_64.AppImage ../dist/OnTheSpot-x86_64.AppImage
 
-
-echo " => Done "
+echo " => Done! Packaged tar.gz is available in 'dist/OnTheSpot-x86_64.AppImage'."

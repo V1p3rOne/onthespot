@@ -1,21 +1,18 @@
 #!/bin/bash
 
-echo "========= OnTheSpot macOS Build Script =========="
+echo "<========= OnTheSpot MacOS Build Script ==========>"
 
 
 echo " => Cleaning up previous builds!"
 rm -rf dist/onthespot_mac.app dist/onthespot_mac_ffm.app
 
-
 echo " => Creating and activating virtual environment..."
 python3 -m venv venv
 source venv/bin/activate
 
-
 echo " => Upgrading pip and installing necessary dependencies..."
 venv/bin/pip install --upgrade pip wheel pyinstaller
 venv/bin/pip install -r requirements.txt
-
 
 echo " => Running PyInstaller to create .app package..."
 mkdir build
@@ -36,7 +33,6 @@ pyinstaller --windowed \
 
 echo " => Setting executable permissions..."
 chmod +x dist/OnTheSpot.app
-
 
 echo " => Creating dmg..."
 mkdir -p dist/OnTheSpot

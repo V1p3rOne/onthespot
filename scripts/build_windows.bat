@@ -1,5 +1,6 @@
 @echo off
 
+REM Set current directory to the project root if running from scripts folder
 set FOLDER_NAME=%cd%
 for %%F in ("%cd%") do set FOLDER_NAME=%%~nxF
 if /i "%FOLDER_NAME%"=="scripts" (
@@ -7,26 +8,32 @@ if /i "%FOLDER_NAME%"=="scripts" (
     cd ..
 )
 
-echo <========= OnTheSpot Windows Build Script =========>
+echo ========= OnTheSpot Windows Build Script =========
 
+REM Clean up previous builds
 echo =^> Cleaning up previous builds...
-del /F /Q /A dist\onthespot_win_executable.exe
+del /F /Q dist\OnTheSpot.exe 2>nul
 
+REM Create virtual environment
 echo =^> Creating virtual environment...
-python -m venv venvwin
+"%SystemDrive%\hostedtoolcache\windows\Python\3.10.11\x64\python.exe" -m venv venvwin
 
+REM Activate virtual environment
 echo =^> Activating virtual environment...
 call venvwin\Scripts\activate.bat
 
+REM Upgrade pip and install dependencies
 echo =^> Installing dependencies via pip...
 python -m pip install --upgrade pip wheel pyinstaller
 pip install -r requirements.txt
 
+REM Download FFmpeg binary
 echo =^> Downloading FFmpeg binary...
 mkdir build
 curl -L -o build\ffmpeg.zip https://github.com/GyanD/codexffmpeg/releases/download/7.1/ffmpeg-7.1-essentials_build.zip
 powershell -Command "Expand-Archive -Path build\ffmpeg.zip -DestinationPath build\ffmpeg"
 
+REM Run PyInstaller to create the executable
 echo =^> Running PyInstaller to create .exe package...
 pyinstaller --onefile --noconsole --noconfirm ^
     --hidden-import="zeroconf._utils.ipaddress" ^
@@ -41,8 +48,9 @@ pyinstaller --onefile --noconsole --noconfirm ^
     --icon="src/onthespot/resources/icons/onthespot.png" ^
     src\portable.py
 
+REM Clean up temporary files
 echo =^> Cleaning up temporary files...
-del /F /Q *.spec
-rmdir /s /q build __pycache__ ffbin_win venvwin
+del /F /Q *.spec 2>nul
+rmdir /s /q build __pycache__ venvwin 2>nul
 
-echo =^> Done! Executable available as 'dist/OnTheSpot.exe'.
+echo =^> Done! Executable available as 'dist\OnTheSpot.exe'.

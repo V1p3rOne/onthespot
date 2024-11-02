@@ -14,7 +14,7 @@ cd build
 
 # Step 3: Download appimagetool to package the final AppImage
 wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
-chmod +x appimagetool-x86_64.AppImage  # Make it executable
+chmod +x appimagetool-x86_64.AppImage
 
 # Download Python AppImage, which will be used to run the application in a self-contained environment
 wget https://github.com/niess/python-appimage/releases/download/python3.12/python3.12.7-cp312-cp312-manylinux2014_x86_64.AppImage -O python.AppImage

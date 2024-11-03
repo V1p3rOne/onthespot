@@ -4,23 +4,15 @@ version-template: '$MAJOR.$MINOR.$PATCH'
 
 categories:
   - title: '## Features'
-    labels:
-      - 'feat'
-      - 'feature'
+    labels: ['feat', 'feature']
   - title: '## Bug Fixes'
-    labels:
-      - 'fix'
-      - 'bug'
+    labels: ['fix', 'bug']
   - title: '## Documentation'
-    labels:
-      - 'docs'
-      - 'documentation'
-  - title: '## Chores'
-    labels:
-      - 'chore'
-      - 'maintenance'
+    labels: ['docs', 'documentation']
+  - title: '## Maintenance'
+    labels: ['chore', 'maintenance']
 
-change-template: '- $TITLE ([#$NUMBER]($URL)) ([`$SHORT_SHA`]($COMMIT_URL)) by @$AUTHOR'
+change-template: '- $TITLE ([`$SHORT_SHA`]($COMMIT_URL)) by @$AUTHOR'
 
 autolabeler:
   - label: 'feat'
@@ -40,10 +32,10 @@ exclude-labels:
 
 template: |
   # :sparkles: Month Release
+  Version: v$NEXT_PATCH_VERSION
 
-  **Version**: v$NEXT_PATCH_VERSION
-
-  See the full list of changes and improvements below!
+  See below for the changelog:
 
   $CHANGES
 
+  **Full Changelog**: [$PREVIOUS_TAG...$NEW_TAG]($COMPARE_URL)

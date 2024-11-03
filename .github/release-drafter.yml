@@ -39,7 +39,7 @@ exclude-labels:
   - 'wontfix'
 
 template: |
-  # :sparkles: $MONTH Release
+  # :sparkles: Month Release
 
   **Version**: v$NEXT_PATCH_VERSION
 

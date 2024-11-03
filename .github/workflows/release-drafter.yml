@@ -1,25 +1,31 @@
 name: Release Drafter
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   release:
-    types: [published]
+    types: [created]
 
 jobs:
-  update_release_draft:
+  update-release-draft:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Get the current month
+        id: get_month
+        run: echo "::set-output name=month::$(date +'%B')"
 
-      - name: Run Release Drafter
-        uses: release-drafter/release-drafter@v5
+      - name: Update Release Draft
+        uses: actions/github-script@v6
         with:
-          config-name: release-drafter.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const month = "${{ steps.get_month.outputs.month }}";
+            const release = await github.repos.getReleaseByTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag: context.payload.release.tag_name,
+            });
+            await github.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.data.id,
+              name: `✨ ${month} Release`,
+            });

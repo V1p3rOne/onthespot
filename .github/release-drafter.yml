@@ -3,24 +3,24 @@ tag-template: 'v$NEXT_PATCH_VERSION'
 version-template: '$MAJOR.$MINOR.$PATCH'
 
 categories:
-  - title: '### Features'
+  - title: '## Features'
     labels:
       - 'feat'
       - 'feature'
-  - title: '### Bug Fixes'
+  - title: '## Bug Fixes'
     labels:
       - 'fix'
       - 'bug'
-  - title: '### Documentation'
+  - title: '## Documentation'
     labels:
       - 'docs'
       - 'documentation'
-  - title: '### Chores'
+  - title: '## Chores'
     labels:
       - 'chore'
       - 'maintenance'
 
-change-template: '- $TITLE ([#$NUMBER]($URL)) [`$SHORT_SHA`]($COMMIT_URL) by @$AUTHOR'
+change-template: '- $TITLE ([#$NUMBER]($URL)) ([`$SHORT_SHA`]($COMMIT_URL)) by @$AUTHOR'
 
 autolabeler:
   - label: 'feat'
@@ -39,7 +39,7 @@ exclude-labels:
   - 'wontfix'
 
 template: |
-  # :tada: $MONTH Release
+  # :sparkles: $MONTH Release
 
   **Version**: v$NEXT_PATCH_VERSION
 
@@ -48,3 +48,5 @@ template: |
   ## Changelog
 
   $CHANGES
+
+  Check below for Downloads!

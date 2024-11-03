@@ -31,11 +31,9 @@ exclude-labels:
   - 'wontfix'
 
 template: |
-  # :sparkles: Month Release
+  # :sparkles: $MONTH Release
   `Version: v$NEXT_PATCH_VERSION`
 
-  See below for the changelog:
+  See the full list of changes and improvements below!
 
   $CHANGES
-
-

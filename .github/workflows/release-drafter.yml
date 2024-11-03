@@ -5,19 +5,14 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
-  release:
-    types: [published]
+    types: [opened, reopened, synchronize]
 
 jobs:
-  release_drafter:
+  update_release_draft:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Run Release Drafter
+      - uses: actions/checkout@v4
+      - name: Release Drafter
         uses: release-drafter/release-drafter@v5
         with:
           config-name: release-drafter.yml

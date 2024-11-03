@@ -32,10 +32,10 @@ exclude-labels:
 
 template: |
   # :sparkles: Month Release
-  Version: v$NEXT_PATCH_VERSION
+  `Version: v$NEXT_PATCH_VERSION`
 
   See below for the changelog:
 
   $CHANGES
 
-  **Full Changelog**: [$PREVIOUS_TAG...$NEW_TAG]($COMPARE_URL)
+

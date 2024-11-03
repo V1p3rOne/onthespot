@@ -66,7 +66,8 @@ If you have any questions or run into issues while using OnTheSpot, feel free to
 
 Contributions are welcome! If you encounter bugs, have suggestions, or would like to translate the app to your native language feel free to [**open an issue**](https://github.com/justin025/onthespot/issues) or submit a pull request.
 
-For more detailed info, please read our [**Contributions**](docs/contributing.md) Document.
+> [!NOTE]  
+>For more detailed info, please read our [**Contributions**](docs/contributing.md) Document.
 
 ## Disclaimer
 
